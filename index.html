@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Simple Click Game</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f0f0f0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    h1 {
+        margin-bottom: 10px;
+    }
+
+    #game-area {
+        width: 500px;
+        height: 300px;
+        background: white;
+        border: 2px solid #333;
+        position: relative;
+        overflow: hidden;
+        margin-top: 20px;
+    }
+
+    #target {
+        width: 60px;
+        height: 60px;
+        background: rgb(255, 80, 80);
+        border-radius: 50%;
+        position: absolute;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        user-select: none;
+    }
+
+    #score, #timer {
+        font-size: 20px;
+        margin: 5px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 18px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<h1>Simple Click Game</h1>
+<div id="score">Score: 0</div>
+<div id="timer">Time: 30</div>
+<button onclick="startGame()">Start Game</button>
+
+<div id="game-area">
+    <div id="target">+</div>
+</div>
+
+<script>
+    let score = 0;
+    let timeLeft = 30;
+    let gameInterval;
+    let timerInterval;
+
+    const target = document.getElementById('target');
+    const gameArea = document.getElementById('game-area');
+
+    // Move target to random location
+    function moveTarget() {
+        const x = Math.random() * (gameArea.clientWidth - target.clientWidth);
+        const y = Math.random() * (gameArea.clientHeight - target.clientHeight);
+
+        target.style.left = x + "px";
+        target.style.top = y + "px";
+    }
+
+    // Start the game
+    function startGame() {
+        score = 0;
+        timeLeft = 30;
+
+        document.getElementById('score').innerText = "Score: 0";
+        document.getElementById('timer').innerText = "Time: 30";
+
+        moveTarget();
+
+        gameInterval = setInterval(moveTarget, 800);
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            document.getElementById('timer').innerText = "Time: " + timeLeft;
+
+            if (timeLeft <= 0) endGame();
+        }, 1000);
+    }
+
+    // End the game
+    function endGame() {
+        clearInterval(gameInterval);
+        clearInterval(timerInterval);
+        alert("Time's up! Your score: " + score);
+    }
+
+    // On click increase score
+    target.addEventListener("click", () => {
+        score++;
+        document.getElementById('score').innerText = "Score: " + score;
+        moveTarget();
+    });
+</script>
+
+</body>
+</html>
